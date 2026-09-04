@@ -100,7 +100,6 @@ export default function DashboardPage() {
         },
     ];
 
-    // 3. Loading View
     if (loading) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-[#020817]">
