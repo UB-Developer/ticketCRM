@@ -100,18 +100,16 @@ export default function DashboardPage() {
         },
     ];
 
-    // 3. Loading View
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#020817]">
+            <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-[#020817]">
                 <div className="flex flex-col items-center gap-4">
                     <div className="h-10 w-10 animate-spin rounded-full border-4 border-cyan-500 border-t-transparent"></div>
-                    <p className="text-sm font-medium text-slate-400">Loading your dashboard...</p>
+                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Loading your dashboard...</p>
                 </div>
             </div>
         );
     }
-
     // 4. If no user, don't render (protected route)
     if (!user) return null;
 

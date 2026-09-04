@@ -10,7 +10,6 @@ import {
     Package,
     Ticket,
     Users,
-    FileText,
     BarChart3,
     Settings,
     UserCog,
