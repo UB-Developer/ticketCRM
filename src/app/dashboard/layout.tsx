@@ -2,57 +2,61 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { getUser, isAuthenticated } from "@/lib/auth"; // Aapke auth helpers
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import { getUser, isAuthenticated } from "@/store/authStore";
-import { AuthUser } from "@/types/auth";
+import { Loader2 } from "lucide-react";
 
-export default function DashboardLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    const router = useRouter();
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const [user, setUser] = useState<AuthUser | null>(null);
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+    const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
+        // Client side check
         if (!isAuthenticated()) {
-            router.push("/login");
+            router.replace("/login");
             return;
         }
-        const currentUser = getUser();
-        if (currentUser) setUser(currentUser);
+
+        const userData = getUser();
+        if (userData) {
+            setUser(userData);
+        }
         setLoading(false);
     }, [router]);
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-[#020817]">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-cyan-500 border-t-transparent"></div>
+            <div className="flex h-screen w-full items-center justify-center bg-slate-50 dark:bg-[#050b14]">
+                <Loader2 className="animate-spin text-cyan-500" size={32} />
             </div>
         );
     }
 
-    if (!user) return null;
-
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#020817]">
-            {/* Sidebar */}
-            <DashboardSidebar
-                user={user}
-                mobileOpen={mobileOpen}
-                setMobileOpen={setMobileOpen}
+        <div className="min-h-screen bg-slate-50 dark:bg-[#050b14]">
+            {/* Sidebar: Fixed width 280px */}
+            <DashboardSidebar 
+                user={user} 
+                mobileOpen={mobileOpen} 
+                setMobileOpen={setMobileOpen} 
             />
 
-            {/* Main Area */}
-            <div className="lg:ml-[280px]">
-                {/* Header */}
-                <DashboardHeader user={user} setMobileOpen={setMobileOpen} />
+            {/* Content Area: lg:ml-[280px] se sidebar ke liye jagah ban jayegi */}
+            <div className="flex min-h-screen flex-col lg:ml-[280px]">
+                <DashboardHeader 
+                    user={user} 
+                    setMobileOpen={setMobileOpen} 
+                />
 
-                {/* Yahan aapka page ka content load hoga */}
-                <main>{children}</main>
+                <main className="flex-1 p-4 md:p-6 lg:p-8">
+                    {/* Max width container taake content boht phailay nahi */}
+                    <div className="mx-auto max-w-7xl">
+                        {children}
+                    </div>
+                </main>
             </div>
         </div>
     );
