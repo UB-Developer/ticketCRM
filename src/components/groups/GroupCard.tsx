@@ -31,7 +31,7 @@ export default function GroupCard({ group }: { group: UmrahGroup }) {
                     {[going, returnF].map((flight, idx) => flight && (
                         <div key={idx} className="relative flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-100 dark:border-white/5">
                             <div className="flex items-center gap-3">
-                                <img src={`/storage/${flight.logo}`} className="h-8 w-8 object-contain" alt="airline" />
+                                <img src={`https://noorulharmain.com.pk/storage/${flight.logo}`} className="h-8 w-8 object-contain" alt="airline" />
                                 <div>
                                     <div className="font-bold text-sm">{flight.from_place} → {flight.to_place}</div>
                                     <div className="text-[10px] text-slate-500 uppercase font-bold">{idx === 0 ? 'Going' : 'Return'} Flight</div>

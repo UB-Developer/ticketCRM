@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
     ArrowLeft,
@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 
 // Bhai jaan ye imports lazmi check kar lena apne folder structure ke hisaab se
-import api from "@/lib/api"; 
-import { setAuth } from "@/store/authStore"; 
+import api from "@/lib/api";
+import { setAuth, isAuthenticated } from "@/lib/auth";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -35,6 +35,12 @@ export default function RegisterPage() {
         password_confirmation: "",
     });
 
+     useEffect(() => {
+            if (isAuthenticated()) {
+                router.replace("/dashboard");
+            }
+        }, [router]);
+
     // Input Change Handler
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -45,25 +51,23 @@ export default function RegisterPage() {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setError("");
+        setError("");   
         setLoading(true);
 
         try {
-            // Laravel Backend Call
             const response = await api.post("/ticket/register", formData);
             const data = response.data;
 
-            // 1. Store token and user in localStorage/sessionStorage
-            setAuth(data.token, data.user, true); 
+            if (data?.token && data?.user) {
+                // ✅ COOKIES SET KAREIN
+                setAuth(data.token, data.user);
 
-            // 2. Redirect to dashboard
-            router.push("/dashboard");
-            
+                // ✅ Refresh and Redirect
+                router.refresh();
+                router.push("/dashboard");
+            }
         } catch (err: any) {
-            // Error handling (Backend validation errors dikhane ke liye)
-            const backendError = err.response?.data?.message || 
-                                 (err.response?.data?.errors && Object.values(err.response.data.errors)[0]) ||
-                                 "Registration failed. Please try again.";
+            const backendError = err.response?.data?.message || "Registration failed.";
             setError(String(backendError));
         } finally {
             setLoading(false);
