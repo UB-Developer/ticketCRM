@@ -116,19 +116,12 @@ export default function DashboardPage() {
     return (
         <div className="min-h-screen bg-slate-100 dark:bg-[#020817]">
             {/* Sidebar */}
-            <DashboardSidebar
-                user={user}
-                mobileOpen={mobileOpen}
-                setMobileOpen={setMobileOpen}
-            />
+            
 
             {/* Main Area */}
-            <div className="lg:ml-[280px]">
                 {/* Header */}
-                <DashboardHeader user={user} setMobileOpen={setMobileOpen} />
 
                 {/* Content */}
-                <main className="p-4 sm:p-6 lg:p-8">
                     {/* Page Heading */}
                     <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
@@ -318,8 +311,6 @@ export default function DashboardPage() {
                             </div>
                         </div>
                     </div>
-                </main>
-            </div>
         </div>
     );
 }
