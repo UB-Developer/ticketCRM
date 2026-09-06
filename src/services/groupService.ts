@@ -10,8 +10,19 @@ interface PaginatedResponse<T> {
 }
 
 export const groupService = {
-    getAllGroups: async (page: number = 1) => {
-        const response = await api.get<PaginatedResponse<UmrahGroup>>(`/ticket/groups?page=${page}`);
+    // Yahan humne dusra argument 'token' add kar diya hai jo optional (?) hai
+    getAllGroups: async (page: number = 1, token?: string) => {
+        
+        // Agar token pass kiya gaya hai (Server Side se), toh headers mein add karein
+        const config = token 
+            ? { headers: { Authorization: `Bearer ${token}` } } 
+            : {};
+
+        const response = await api.get<PaginatedResponse<UmrahGroup>>(
+            `/ticket/groups?page=${page}`, 
+            config // Ye config headers bhejay ga
+        );
+        
         return response.data;
     },
 
