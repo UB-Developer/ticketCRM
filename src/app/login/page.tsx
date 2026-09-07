@@ -38,13 +38,10 @@ export default function LoginPage() {
             const data = response.data;
 
             if (data?.token && data?.user) {
-                // 1. Cookies mein save karein (Server-side compatibility ke liye)
                 setAuth(data.token, data.user);
 
-                // 2. Next.js ko refresh karein taake Middleware aur Server components ko naye cookies mil jayein
                 router.refresh();
 
-                // 3. Dashboard par bhejein
                 router.push("/dashboard");
             } else {
                 throw new Error("Invalid login response from server.");

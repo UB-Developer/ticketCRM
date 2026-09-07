@@ -1,6 +1,7 @@
 import React from "react";
 import { Plane, Calendar, MapPin, Users } from "lucide-react";
 import { UmrahGroup } from "@/types/umrah-group";
+import { formatPrice } from "@/lib/utils";
 
 export default function GroupCard({ group }: { group: UmrahGroup }) {
     const going = group.flights.find(f => f.pivot?.type === 'going');
@@ -16,7 +17,7 @@ export default function GroupCard({ group }: { group: UmrahGroup }) {
                     </div>
                     <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-2xl text-center">
                         <div className="text-xs font-bold uppercase">Price</div>
-                        <div className="text-xl font-black">Rs {group.price.toLocaleString()}</div>
+                        <div className="text-xl font-black">Rs {formatPrice(group.price)}</div>
                     </div>
                 </div>
             </div>
