@@ -11,16 +11,27 @@ interface PaginatedResponse<T> {
 
 export const groupService = {
     // Yahan humne dusra argument 'token' add kar diya hai jo optional (?) hai
-    getAllGroups: async (page: number = 1, token?: string) => {
+    getAllGroups: async (page: number = 1, params: any = {}, token?: string) => {
         
-        // Agar token pass kiya gaya hai (Server Side se), toh headers mein add karein
+        // Aapka authorization logic
         const config = token 
             ? { headers: { Authorization: `Bearer ${token}` } } 
             : {};
 
+        // URL Parameters banana (Page + Search/Filters)
+        // Object.fromEntries aur filter isliye taake khali filters API ko na jayein
+        const cleanParams = Object.fromEntries(
+            Object.entries(params).filter(([_, v]) => v != null && v !== "")
+        );
+
+        const query = new URLSearchParams({
+            page: page.toString(),
+            ...cleanParams
+        }).toString();
+
         const response = await api.get<PaginatedResponse<UmrahGroup>>(
-            `/ticket/groups?page=${page}`, 
-            config // Ye config headers bhejay ga
+            `/ticket/groups?${query}`, 
+            config 
         );
         
         return response.data;

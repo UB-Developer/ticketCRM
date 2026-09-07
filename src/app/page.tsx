@@ -67,6 +67,9 @@ export default function HomePage() {
             <Link href="/register" className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:scale-[1.02]">
               Get Started
             </Link>
+            <Link href="/search" aria-label="Book a flight now" className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:scale-[1.02]">
+              Book Flight Now
+            </Link>
           </div>
         </div>
       </header>
@@ -163,9 +166,12 @@ export default function HomePage() {
 
       {/* CTA Section */}
       <section className="relative z-10 px-6 pb-24">
-        <div className="mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] border border-cyan-400/20 bg-white dark:bg-gradient-to-br dark:from-cyan-500/10 dark:via-blue-500/10 dark:to-purple-500/10 p-10 text-center shadow-xl dark:shadow-none sm:p-16">
+        <div className="mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] border border-cyan-400/20 dark:bg-gradient-to-br dark:from-cyan-500/10 dark:via-blue-500/10 dark:to-purple-500/10 p-10 text-center shadow-xl dark:shadow-none sm:p-16">
           <h2 className="text-3xl font-bold sm:text-4xl text-slate-900 dark:text-white">Ready to Upgrade Your Travel Operations?</h2>
           <p className="mx-auto mt-4 max-w-xl text-slate-600 dark:text-slate-400">Create your account and start managing your business with a modern VVIP CRM.</p>
+          <Link href="/search" className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-blue-500/30 transition hover:scale-[1.02]">
+            Book Flight Now <Plane className="h-4 w-4" />
+          </Link>
           <Link href="/register" className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-blue-500/30">
             Get Started <ArrowRight className="h-4 w-4" />
           </Link>

@@ -2,6 +2,7 @@
 import React from "react";
 import { Save, Info } from "lucide-react";
 import { UmrahGroup } from "@/types/umrah-group";
+import { formatPrice } from "@/lib/utils";
 
 export default function GroupForm({ group }: { group: UmrahGroup }) {
     return (
@@ -26,15 +27,15 @@ export default function GroupForm({ group }: { group: UmrahGroup }) {
                 </div>
                 <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-500 uppercase">Adult Price</label>
-                    <input type="number" defaultValue={group.price} className="w-full bg-slate-50 dark:bg-white/5 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-cyan-500 text-emerald-600 font-bold" />
+                    <input type="number" defaultValue={formatPrice(group.price)} className="w-full bg-slate-50 dark:bg-white/5 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-cyan-500 text-emerald-600 font-bold" />
                 </div>
                 <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-500 uppercase">Child Rate</label>
-                    <input type="number" defaultValue={group.childe_rate} className="w-full bg-slate-50 dark:bg-white/5 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-cyan-500" />
+                    <input type="number" defaultValue={formatPrice(group.childe_rate)} className="w-full bg-slate-50 dark:bg-white/5 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-cyan-500" />
                 </div>
                 <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-500 uppercase">Infant Rate</label>
-                    <input type="number" defaultValue={group.infent_rate} className="w-full bg-slate-50 dark:bg-white/5 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-cyan-500" />
+                    <input type="number" defaultValue={formatPrice(group.infent_rate)} className="w-full bg-slate-50 dark:bg-white/5 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-cyan-500" />
                 </div>
             </div>
 

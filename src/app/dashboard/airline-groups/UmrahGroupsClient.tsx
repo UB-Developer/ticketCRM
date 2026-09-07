@@ -1,70 +1,72 @@
 "use client";
-
 import { useState } from "react";
 import { groupService } from "@/services/groupService";
 import GroupTable from "@/components/groups/GroupTable";
+import GroupSearch from "@/components/groups/GroupSearch";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 export default function UmrahGroupsClient({ initialData }: { initialData: any }) {
-  // Local state mein data aur page number rakhein
-  const [data, setData] = useState(initialData);
-  const [loading, setLoading] = useState(false);
+    const [data, setData] = useState(initialData);
+    const [loading, setLoading] = useState(false);
+    const [filters, setFilters] = useState({});
 
-  const handlePageChange = async (newPage: number) => {
-    if (newPage < 1 || newPage > data.last_page) return;
+    const fetchData = async (pageNumber: number, currentFilters: any) => {
+        setLoading(true);
+        try {
+            // Page bhejo, Filters bhejo, Token chor do (Client side par token null jayega)
+            const res = await groupService.getAllGroups(pageNumber, currentFilters);
+            setData(res);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    setLoading(true);
-    try {
-      // Client side par API call (Axios interceptor token khud handle karega)
-      const res = await groupService.getAllGroups(newPage);
-      setData(res); // URL change nahi hoga, sirf data update hoga
-      
-      // Page ke top par scroll karein (Optional)
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (error) {
-      console.error("Pagination failed", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const handleSearch = (key: string, value: string) => {
+        const newFilters = { ...filters, [key]: value };
+        setFilters(newFilters);
+        fetchData(1, newFilters); // Search hamesha page 1 se shuru hogi
+    };
 
-  return (
-    <div className="space-y-6 relative">
-      {/* Loading Overlay taake user ko pata chale data load ho raha hai */}
-      {loading && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/50 dark:bg-[#050b14]/50 backdrop-blur-[2px] rounded-3xl">
-          <Loader2 className="h-10 w-10 animate-spin text-cyan-500" />
+    const clearFilters = () => {
+        setFilters({});
+        fetchData(1, {});
+        // Inputs ko reset karne ke liye window reload ya refs use kar saktay hain
+    };
+
+    return (
+        <div className="space-y-6 relative">
+            <GroupSearch onSearch={handleSearch} onClear={clearFilters} />
+
+            {loading && (
+                <div className="absolute inset-x-0 top-40 z-20 flex justify-center"><Loader2 className="animate-spin h-12 w-12 text-cyan-500" /></div>
+            )}
+
+            <div className={loading ? "opacity-30 pointer-events-none" : ""}>
+                <GroupTable groups={data.data} />
+            </div>
+
+            {/* Pagination (Pehle wala logic rahega bas fetchData use hoga) */}
+            <div className="flex justify-between items-center bg-white dark:bg-white/5 p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                <span className="text-sm text-slate-500">Page {data.current_page} of {data.last_page}</span>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => fetchData(data.current_page - 1, filters)}
+                        disabled={data.current_page === 1 || loading}
+                        className="p-2 border rounded-xl disabled:opacity-30"
+                    >
+                        <ChevronLeft />
+                    </button>
+                    <button
+                        onClick={() => fetchData(data.current_page + 1, filters)}
+                        disabled={data.current_page === data.last_page || loading}
+                        className="p-2 border rounded-xl disabled:opacity-30"
+                    >
+                        <ChevronRight />
+                    </button>
+                </div>
+            </div>
         </div>
-      )}
-
-      {/* Table Section */}
-      <GroupTable groups={data.data} />
-
-      {/* Pagination Footer - No URL change logic */}
-      <div className="flex justify-between items-center bg-white dark:bg-white/[0.03] p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-        <div className="text-sm font-medium text-slate-500">
-          Showing <span className="text-slate-900 dark:text-white">{data.current_page}</span> of {data.last_page} pages
-          <span className="ml-2 text-[10px] text-slate-400">({data.total} Total)</span>
-        </div>
-
-        <div className="flex gap-2">
-          <button
-            onClick={() => handlePageChange(data.current_page - 1)}
-            disabled={data.current_page === 1 || loading}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-white/5 disabled:opacity-30 transition-all"
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          <button
-            onClick={() => handlePageChange(data.current_page + 1)}
-            disabled={data.current_page === data.last_page || loading}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-white/5 disabled:opacity-30 transition-all"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
