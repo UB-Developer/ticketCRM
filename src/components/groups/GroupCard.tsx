@@ -14,6 +14,7 @@ export default function GroupCard({ group }: { group: UmrahGroup }) {
                     <div>
                         <h2 className="text-2xl font-black">{group.name}</h2>
                         <p className="opacity-80 text-sm font-mono tracking-widest">PNR: {group.pnr_number} | {group.group_no}</p>
+                        <p className="opacity-80 text-sm font-mono tracking-widest">Days: {group.days}</p>
                     </div>
                     <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-2xl text-center">
                         <div className="text-xs font-bold uppercase">Price</div>

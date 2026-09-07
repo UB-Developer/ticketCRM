@@ -5,7 +5,6 @@ import {
     ArrowRight,
     CalendarDays,
     PlaneTakeoff,
-    Users,
 } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { UmrahGroup } from "@/types/umrah-group";
@@ -166,6 +165,24 @@ export default function GroupTable({ groups }: Props) {
                                     "
                                 >
                                     PNR: {group.pnr_number}
+                                </div>
+
+                                <div
+                                    className="
+                                        mt-3
+                                        w-fit
+                                        rounded-lg
+                                        bg-slate-100
+                                        px-2.5
+                                        py-1.5
+                                        text-[20px]
+                                        font-black
+                                        text-slate-600
+                                        dark:bg-white/10
+                                        dark:text-slate-300
+                                    "
+                                >
+                                    Days: {group.days}
                                 </div>
 
                             </div>
